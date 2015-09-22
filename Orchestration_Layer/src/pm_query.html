@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #ccc;
+}
+ 
+.nav ul {
+  list-style: none;
+  background-color: #444;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+.nav li {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.2em;
+  line-height: 40px;
+  height: 40px;
+  border-bottom: 1px solid #888;
+}
+ 
+.nav a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  transition: .3s background-color;
+}
+ 
+.nav a:hover {
+  background-color: #005f5f;
+}
+ 
+.nav a.active {
+  background-color: #fff;
+  color: #444;
+  cursor: default;
+}
+ 
+@media screen and (min-width: 600px) {
+  .nav li {
+    width: 120px;
+    border-bottom: none;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.4em;
+  }
+ 
+  /* Option 1 - Display Inline */
+  .nav li {
+    display: inline-block;
+    margin-right: -4px;
+  }
+ 
+  /* Options 2 - Float
+  .nav li {
+    float: left;
+  }
+  .nav ul {
+    overflow: auto;
+    width: 600px;
+    margin: 0 auto;
+  }
+  .nav {
+    background-color: #444;
+  }
+  */
+}
+</style>
+<script>
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    // XHR for Chrome/Firefox/Opera/Safari.
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    // XDomainRequest for IE.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    // CORS not supported.
+    xhr = null;
+  }
+  return xhr;
+}
+
+
+// Make the actual CORS request.
+function makeCorsRequest() {
+  var id = document.getElementById("id").value;
+  var url = 'http://localhost:1235/pm/query?pmid=' + id;
+  var xhr = createCORSRequest('GET', url);
+
+  xhr.onload = function() {
+    var text = xhr.responseText; //this contains the return value as a stringyfied 'page.html' containing the status of the slave.
+    document.getElementById("myDiv").innerHTML = text; //the 'page.html' is embedded in the inner html of the div.
+  };
+
+  xhr.onerror = function() {
+    alert('There was an error making the request!');
+  };
+
+  xhr.send();
+}
+function myfunc(){
+  makeCorsRequest();
+}
+</script>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <ul>
+        <li class="Create"><a href="create.html">Create</a></li>
+        <li class="Delete"><a href="destroy.html">Delete</a></li>
+        <li class="Vm_Query"><a href="vm_query.html">VM Query</a></li>
+        <li class="Types"><a href="types.html">Types</a></li>
+        <li class="List_Pms"><a href="pm_list.html">List PMs</a></li>
+        <li class="List_Vms"><a href="list_vm.html">List VMs</a></li>
+        <li class="Pm_Query"><a class="active" href="#">PM Query</a></li>
+        <li class="List_Images"><a href="image_list.html">Images</a></li>
+      </ul>
+    </div>
+  </header>
+  <h3>Info of a pm:</h3>
+  <h4>PM ID:</h4>
+  <form id="form" action="" method="post"> <input id="id" type="text" name="url"><br>
+  </form>
+  <button onclick = "myfunc()">Query</button>
+  <div id="myDiv"></div>
+</body>

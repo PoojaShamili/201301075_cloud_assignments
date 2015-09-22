@@ -1,0 +1,2 @@
+sudo apt-get install Flask
+python ../src/configuration.py $1 $2 $3
